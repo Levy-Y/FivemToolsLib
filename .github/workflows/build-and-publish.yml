@@ -13,25 +13,26 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      
+      - name: Setup MSBuild path
+        uses: microsoft/setup-msbuild@v1.3.1
 
       - name: Restore NuGet packages
-        run: nuget restore $env:PROJECT_PATH
+        run: nuget restore FivemToolsLib.sln
 
       - name: Build with MSBuild
-        run: msbuild $env:PROJECT_PATH /p:Configuration=Release
-
-      - name: Create Release
-        uses: actions/create-release@v1
+        run: msbuild FivemToolsLib.sln /p:Configuration=Release
+        
+      - uses: actions/create-release@v1
         id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
-
-      - name: Upload DLL
-        uses: csexton/release-asset-action@v3
+      
+      - uses: csexton/release-asset-action@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           file: bin\Release\net452\publish\FivemToolsLib.dll
