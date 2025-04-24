@@ -32,16 +32,16 @@ I am **not affiliated with the QBCore team**, and this library is not officially
 If you're encountering issues while using this library, it’s very likely **not caused by QBCore itself**.
 
 Please report any problems or bugs directly by opening an issue on the GitHub repository:  
-[Open an Issue on GitHub](https://github.com/YourUsername/FivemToolsLib/issues)
+[Open an Issue on GitHub](https://github.com/levy-y/FivemToolsLib/issues)
 
 ---
 
 ## Getting Started
 
 To get started using `FivemToolsLib`, check out the following:
-- [Installation Guide](/docs/getting-started.html)
-- [Examples](/docs/examples.html)
-- [API Reference](/api/FivemToolsLib.Client.NativeWrappers.html)
+- [Installation Guide](https://levy-y.github.io/FivemToolsLib/docs/getting-started.html)
+- [Examples](https://levy-y.github.io/FivemToolsLib/docs/examples.html)
+- [API Reference](https://levy-y.github.io/FivemToolsLib/api/FivemToolsLib.Client.NativeWrappers.html)
 
 ---
 
