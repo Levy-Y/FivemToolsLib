@@ -5,6 +5,9 @@ on:
     tags:
       - "fivemtoolslib/v*"
 
+permissions:
+  contents: write
+
 env:
   PROJECT_PATH: FivemToolsLib.csproj
 
@@ -35,5 +38,5 @@ jobs:
       - uses: csexton/release-asset-action@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          file: bin\Release\net452\publish\FivemToolsLib.dll
+          file: bin\Release\net452\FivemToolsLib.dll
           release-url: ${{ steps.create_release.outputs.upload_url }}

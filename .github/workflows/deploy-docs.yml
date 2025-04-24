@@ -1,3 +1,6 @@
+name: "Deploy docfx"
+
+
 on:
   push:
     branches:
