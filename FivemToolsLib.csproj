@@ -3,7 +3,10 @@
     <PropertyGroup>
         <TargetFramework>net452</TargetFramework>
     </PropertyGroup>
-
+    <PropertyGroup>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <DocumentationFile>bin\Release\net452\FivemToolsLib.xml</DocumentationFile>
+    </PropertyGroup>
     <ItemGroup>
       <PackageReference Include="CitizenFX.Core.Client" Version="1.0.10230" />
       <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />

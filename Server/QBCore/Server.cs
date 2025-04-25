@@ -1,3 +1,4 @@
+using System;
 using CitizenFX.Core;
 using FivemToolsLib.Server.QBCore.Enums;
 
@@ -165,6 +166,62 @@ namespace FivemToolsLib.Server.QBCore
             }
             
             _qbPlayer.Functions.Logout();
+        }
+        
+        // TODO: Test dynamic method's return type
+        public object GetQbPlayers()
+        {
+            return _coreObject.Functions.GetQBPlayers();
+        }
+
+        public void CreateUsableItem(string itemName, Action action)
+        {
+            _coreObject.Functions.CreateUsableItem(itemName, action);
+        }
+
+        public bool CanUseItem(string itemName)
+        {
+            return (bool)_coreObject.Functions.CanUseItem(itemName);
+        }
+
+        public void UseItem(int source, string itemName)
+        {
+            _coreObject.Functions.UseItem(source, itemName);
+        }
+
+        public void Kick(int source, string reason, bool setKickReason, bool deferrals)
+        {
+            _coreObject.Functions.Kick(source, reason, setKickReason, deferrals);
+        }
+
+        public void AddPermission(int source, string permission)
+        {
+            _coreObject.Functions.AddPermission(source, permission);
+        }
+
+        public void RemovePermission(int source, string permission)
+        {
+            _coreObject.Functions.RemovePermission(source, permission);
+        }
+
+        public bool HasPermission(int source, string permission)
+        {
+            return (bool)_coreObject.Functions.HasPermission(source, permission);
+        }
+
+        public string GetPermission(int source)
+        {
+            return (string)_coreObject.Functions.GetPermission(source);
+        }
+
+        public bool IsPlayerBanned(int source)
+        {
+            return (bool)_coreObject.Functions.IsPlayerBanned(source);
+        }
+
+        public bool IsLicenseInUse(int source)
+        {
+            return (bool)_coreObject.Functions.IsLicenseInUse(source);
         }
     }
 }
