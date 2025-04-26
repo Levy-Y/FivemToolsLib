@@ -12,6 +12,26 @@ function docs {
     docfx .\docfx.json
 }
 
+function tag {
+    Write-Output "Tagging project and pushing to git..."
+
+    $version = Get-Content -Path "VERSION" -Raw
+    $version = $version.Trim()
+
+    if (-not $version) {
+        Write-Error "Version file is empty or missing!"
+        return
+    }
+
+    $tagName = "fivemtoolslib/v$version"
+
+    git tag $tagName
+
+    git push origin $tagName
+
+    Write-Output "Tagged as $tagName and pushed to origin."
+}
+
 function cleanup {
     Write-Output "Removing old/unused binaries, and folders..."
 
@@ -44,6 +64,11 @@ if ($args.Count -eq 0) {
             "docs" {
                 docs
             }
+
+            "tag" {
+                tag
+            }
+
 
             Default {
                 Write-Host "Unkown paramter: $($parameter)"
