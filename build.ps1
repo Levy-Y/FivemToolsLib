@@ -70,7 +70,6 @@ if ($args.Count -eq 0) {
                 tag
             }
 
-
             Default {
                 Write-Host "Unkown paramter: $($parameter)"
             }

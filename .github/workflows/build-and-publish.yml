@@ -34,7 +34,7 @@ jobs:
         run: |
           $packageName = "fivemtoolslib.$($(Get-Content -Path "VERSION" -Raw).Trim()).nupkg"
 
-          dotnet nuget push .\nupkg\$packageName --api-key $env:NUGET_API_KEY --source "https://api.nuget.org/v3/index.json"
+          dotnet nuget push .\nupkg\$packageName --api-key ${{ secrets.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json"
         shell: pwsh
 
       - uses: actions/create-release@v1
