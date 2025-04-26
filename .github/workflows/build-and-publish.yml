@@ -28,10 +28,14 @@ jobs:
         run: msbuild FivemToolsLib.sln /p:Configuration=Release
       
       - name: Pack NuGet package
-        run: dotnet pack $env:PROJECT_PATH -c Release -p:Version=$(cat VERSION) --no-build --output ./nupkg
+        run: dotnet pack $env:PROJECT_PATH -c Release -p:Version=$(cat VERSION) --no-build --output .\nupkg
 
-      - name: Push to NuGet
-        run: dotnet nuget push .\nupkg\*.nupkg --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+      - name: Push NuGet package with version
+        run: |
+          $packageName = "fivemtoolslib.$($(Get-Content -Path "VERSION" -Raw).Trim()).nupkg"
+
+          dotnet nuget push .\nupkg\$packageName --api-key $env:NUGET_API_KEY --source "https://api.nuget.org/v3/index.json"
+        shell: pwsh
 
       - uses: actions/create-release@v1
         id: create_release
