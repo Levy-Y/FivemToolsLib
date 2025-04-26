@@ -39,7 +39,8 @@ function cleanup {
         ".\bin\",
         ".\obj\",
         ".\_site\",
-        ".\api\"
+        ".\api\",
+        ".\nupkg"
     )
 
     foreach ($folder in $folders) {

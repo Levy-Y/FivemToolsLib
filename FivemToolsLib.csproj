@@ -2,7 +2,6 @@
     <PropertyGroup>
         <TargetFramework>net452</TargetFramework>
         <PackageId>FivemToolsLib</PackageId>
-        <Version>$([System.IO.File]::ReadAllText('VERSION'))</Version>
         <Authors>Levy-Y</Authors>
         <Description>A set of helper tools for FiveM development.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
