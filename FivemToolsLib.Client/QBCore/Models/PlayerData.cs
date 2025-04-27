@@ -1,4 +1,4 @@
-namespace FivemToolsLib.Client.QBCore.Model
+namespace FivemToolsLib.Client.QBCore.Models
 {
     /// <summary>
     /// Represents detailed information about a player's identity.

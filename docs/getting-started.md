@@ -21,17 +21,23 @@ We highly recommend using the official **CitizenFX C# template** to set up your 
 
 ## Installing the Library
 
-Currently, you'll need to manually add the compiled `FivemToolsLib.dll` to your resource:
+The recommended way to install FivemToolsLib is via NuGet:
 
-1. Clone the repo or download the latest release.
-2. Compile the library or use a prebuilt DLL.
-3. Add it to your C# resource project (`libs/` for example).
-4. Reference it in your `.csproj`:
+1. Open your C# resource folder.
+
+2. Run the following command in your project directory to install the package:
+    ```sh
+    dotnet add package FivemToolsLib.Client
+    ```
+   or
+    ```sh
+    dotnet add package FivemToolsLib.Server
+    ```
+   
+3. Alternatively, you can download `FivemToolsLib.Client.dll` (or for server side `FivemToolsLib.Server.dll`) from the latest GitHub release, and place it in a folder like `libs/`, and add the following to your `.csproj`:
 
 ```xml
 <ItemGroup>
-    <Reference Include="FivemToolsLib" HintPath="libs/FivemToolsLib.dll"/>
+    <Reference Include="FivemToolsLib.Client" HintPath="libs/FivemToolsLib.Client.dll"/>
 </ItemGroup>
 ```
-
-> I am planning on uploading the library to NuGet in the future for easier setup, stay tuned for that!

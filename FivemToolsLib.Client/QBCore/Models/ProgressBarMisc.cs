@@ -1,6 +1,6 @@
 using CitizenFX.Core;
 
-namespace FivemToolsLib.Client.QBCore.Model
+namespace FivemToolsLib.Client.QBCore.Models
 {
     /// <summary>
     /// Represents an animation to be played during an action.
@@ -45,7 +45,7 @@ namespace FivemToolsLib.Client.QBCore.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="Prop"/> class.
         /// </summary>
-        /// <param name="model">Model name.</param>
+        /// <param name="model">Models name.</param>
         /// <param name="bone">Bone index.</param>
         /// <param name="coords">Coordinates.</param>
         /// <param name="rotation">Rotation.</param>

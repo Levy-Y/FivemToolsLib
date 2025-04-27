@@ -6,7 +6,8 @@
         {
           "src": ".",
           "files": [
-            "FivemToolsLib.csproj"
+            "FivemToolsLib.Server/FivemToolsLib.Server.csproj",
+            "FivemToolsLib.Client/FivemToolsLib.Client.csproj"
           ]
         }
       ],

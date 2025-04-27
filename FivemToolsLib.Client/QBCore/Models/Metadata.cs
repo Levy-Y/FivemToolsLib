@@ -1,4 +1,4 @@
-namespace FivemToolsLib.Client.QBCore.Model
+namespace FivemToolsLib.Client.QBCore.Models
 {
     /// <summary>
     /// Represents metadata about a player's current state.

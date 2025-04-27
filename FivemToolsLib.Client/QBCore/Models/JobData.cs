@@ -1,4 +1,4 @@
-namespace FivemToolsLib.Client.QBCore.Model
+namespace FivemToolsLib.Client.QBCore.Models
 {
     /// <summary>
     /// Represents a player's job information.

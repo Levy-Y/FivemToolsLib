@@ -9,7 +9,9 @@ permissions:
   contents: write
 
 env:
-  PROJECT_PATH: FivemToolsLib.csproj
+  CLIENT_PROJECT_PATH: .\FivemToolsLib.Client\FivemToolsLib.Client.csproj
+  SERVER_PROJECT_PATH: .\FivemToolsLib.Server\FivemToolsLib.Server.csproj
+
 
 jobs:
   deploy:
@@ -27,15 +29,26 @@ jobs:
       - name: Build with MSBuild
         run: msbuild FivemToolsLib.sln /p:Configuration=Release
       
-      - name: Pack NuGet package
-        run: dotnet pack $env:PROJECT_PATH -c Release -p:Version=$(cat VERSION) --no-build --output .\nupkg
+      - name: Pack client NuGet package
+        run: dotnet pack $env:CLIENT_PROJECT_PATH -c Release -p:Version=$(cat VERSION) --no-build --output .\FivemToolsLib.Client\nupkg
 
-      - name: Push NuGet package with version
+      - name: Pack server NuGet package
+        run: dotnet pack $env:SERVER_PROJECT_PATH -c Release -p:Version=$(cat VERSION) --no-build --output .\FivemToolsLib.Server\nupkg
+
+      - name: Push client NuGet package with version
         run: |
-          $packageName = "fivemtoolslib.$($(Get-Content -Path "VERSION" -Raw).Trim()).nupkg"
-
-          dotnet nuget push .\nupkg\$packageName --api-key ${{ secrets.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json"
+          $packageName = "FivemToolsLib.Client.$($(Get-Content -Path "VERSION" -Raw).Trim()).nupkg"
+          
+          dotnet nuget push .\FivemToolsLib.Client\nupkg\$packageName --api-key ${{ secrets.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json"
         shell: pwsh
+        
+      - name: Push server NuGet package with version
+        run: |
+          $packageName = "FivemToolsLib.Server.$($(Get-Content -Path "VERSION" -Raw).Trim()).nupkg"
+
+          dotnet nuget push .\FivemToolsLib.Server\nupkg\$packageName --api-key ${{ secrets.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json"
+        shell: pwsh
+
 
       - uses: actions/create-release@v1
         id: create_release
@@ -49,8 +62,11 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           files: |
-            bin\Release\net452\FivemToolsLib.xml
-            bin\Release\net452\FivemToolsLib.dll
-            .\nupkg\*.nupkg
-            .\nupkg\*.snupkg
+            FivemToolsLib.Client\bin\Release\net452\FivemToolsLib.Client.dll
+            FivemToolsLib.Client\bin\Release\net452\FivemToolsLib.Client.xml
+            FivemToolsLib.Server\bin\Release\net452\FivemToolsLib.Server.dll
+            FivemToolsLib.Server\bin\Release\net452\FivemToolsLib.Server.xml
+          pattern: |
+            FivemToolsLib.Client\nupkg\*.nupkg
+            FivemToolsLib.Server\nupkg\*.nupkg
           release-url: ${{ steps.create_release.outputs.upload_url }}

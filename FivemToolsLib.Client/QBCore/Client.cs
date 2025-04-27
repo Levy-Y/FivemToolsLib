@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using FivemToolsLib.Client.QBCore.Model;
-using Prop = FivemToolsLib.Client.QBCore.Model.Prop;
+using FivemToolsLib.Client.QBCore.Models;
+using Prop = FivemToolsLib.Client.QBCore.Models.Prop;
 
 namespace FivemToolsLib.Client.QBCore
 {
@@ -16,18 +16,18 @@ namespace FivemToolsLib.Client.QBCore
         private dynamic _qbPlayer;
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="Client"/> class with the specified QBCore core object.
+        /// Initializes a new instance of the <see cref="Client"/> class with the specified <see cref="BaseScript.Exports"/> object.
         /// </summary>
-        /// <param name="coreObject">The dynamic core object provided by QBCore, acquired from <see cref="BaseScript.Exports"/></param>
-        public Client(dynamic coreObject)
+        /// <param name="exports">The dynamic <see cref="BaseScript.Exports"/> object</param>
+        public Client(dynamic exports)
         {
-            if (coreObject == null) 
+            _coreObject = exports["qb-core"].GetCoreObject();
+            
+            if (_coreObject == null) 
             {
                 Debug.WriteLine("Client: Core object is null, QBCore isn't initialized");
                 return;
             }
-            
-            _coreObject = coreObject;
                 
             var player = _coreObject.Functions.GetPlayerData();
 

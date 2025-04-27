@@ -1,10 +1,16 @@
-$csprojPath = ".\FivemToolsLib.csproj"
+$csprojPathClient = ".\FivemToolsLib.Client\FivemToolsLib.Client.csproj"
+$csprojPathServer = ".\FivemToolsLib.Server\FivemToolsLib.Server.csproj"
 
 function build {
-    Write-Output "Building application..."
-    dotnet restore $csprojPath
-    dotnet build $csprojPath -c Release --no-restore
-    dotnet publish $csprojPath -c Release --no-build
+    Write-Output "Building Client library..."
+    dotnet restore $csprojPathClient
+    dotnet build $csprojPathClient -c Release --no-restore
+    dotnet publish $csprojPathClient -c Release --no-build
+
+    Write-Output "Building Server library..."
+    dotnet restore $csprojPathServer
+    dotnet build $csprojPathServer -c Release --no-restore
+    dotnet publish $csprojPathServer -c Release --no-build
 }
 
 function docs {
@@ -36,11 +42,14 @@ function cleanup {
     Write-Output "Removing old/unused binaries, and folders..."
 
     $folders = @(
-        ".\bin\",
-        ".\obj\",
+        ".\FivemToolsLib.Client\bin\",
+        ".\FivemToolsLib.Client\obj\",
+        ".\FivemToolsLib.Client\nupkg",
+        ".\FivemToolsLib.Server\bin\",
+        ".\FivemToolsLib.Server\obj\",
+        ".\FivemToolsLib.Server\nupkg",
         ".\_site\",
-        ".\api\",
-        ".\nupkg"
+        ".\api\"
     )
 
     foreach ($folder in $folders) {
@@ -50,7 +59,7 @@ function cleanup {
 
 if ($args.Count -eq 0) {
     Write-Output "No parameters provided. Usage:"
-    Write-Output ".\build.ps1 [clean] [build] [docs]"
+    Write-Output ".\build.ps1 [clean] [build] [docs] [tag]"
 } else {
     foreach ($parameter in $args) {
         switch ($parameter) {

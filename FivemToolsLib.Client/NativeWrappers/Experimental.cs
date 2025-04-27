@@ -1,5 +1,4 @@
 using CitizenFX.Core.Native;
-using FivemToolsLib.Shared;
 
 namespace FivemToolsLib.Client.NativeWrappers
 {

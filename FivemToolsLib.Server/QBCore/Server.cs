@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Dynamic;
 using CitizenFX.Core;
 using FivemToolsLib.Server.QBCore.Enums;
+using FivemToolsLib.Server.QBCore.Models;
 
 namespace FivemToolsLib.Server.QBCore
 {
@@ -12,15 +15,15 @@ namespace FivemToolsLib.Server.QBCore
         private readonly dynamic _coreObject;
         private dynamic _qbPlayer;
         
-        public Server(dynamic coreObject)
+        public Server(dynamic exports)
         {
-            if (coreObject == null) 
+            _coreObject = exports["qb-core"].GetCoreObject();
+         
+            if (_coreObject == null) 
             {
                 Debug.WriteLine("Server: Core object is null, QBCore isn't initialized");
                 return;
             }
-            
-            _coreObject = coreObject;
             
             Debug.WriteLine("Successful initialization");
         }
@@ -173,15 +176,21 @@ namespace FivemToolsLib.Server.QBCore
         {
             return _coreObject.Functions.GetQBPlayers();
         }
-
-        public void CreateUsableItem(string itemName, Action action)
+        
+        // TODO: ExpandoObject should be an Item
+        /// <summary>
+        /// Registers an item as usable in QBCore
+        /// </summary>
+        /// <param name="itemName">The name of the item</param>
+        /// <param name="action">The action to run when the item is used</param>
+        public void CreateUsableItem(string itemName, Action<int, ExpandoObject> action)
         {
-            _coreObject.Functions.CreateUsableItem(itemName, action);
+            _coreObject.Functions.CreateUseableItem(itemName, action);
         }
 
         public bool CanUseItem(string itemName)
         {
-            return (bool)_coreObject.Functions.CanUseItem(itemName);
+            return _coreObject.Functions.CanUseItem(itemName) != null;
         }
 
         public void UseItem(int source, string itemName)
@@ -223,5 +232,50 @@ namespace FivemToolsLib.Server.QBCore
         {
             return (bool)_coreObject.Functions.IsLicenseInUse(source);
         }
+        
+        public bool AddItem(string itemName, Item item)
+        {
+            bool result = _coreObject.Functions.AddItem(itemName, new
+            {
+                name = item.Name,
+                label = item.Label,
+                weight = item.Weight,
+                type = item.Type,
+                image = item.Image,
+                unique = item.Unique,
+                useable = item.Useable,
+                shouldClose = item.ShouldClose,
+                combinable = item.Combinable,
+                description = item.Description,
+            });
+            
+            return result;
+        }
+
+        public bool AddJob(string jobName, Job job)
+        {
+            var tempGrades = new Dictionary<int, object>();
+            
+            foreach (var gradesKey in job.Grades.Keys)
+            {
+                var grade = job.Grades[gradesKey];
+                tempGrades.Add(gradesKey, new
+                {
+                    name = grade.Name,
+                    payment = grade.Payment
+                });
+            }
+            
+            bool result = _coreObject.Functions.AddJob(jobName, new
+            {
+                label = job.Label,
+                defaultDuty = job.DefaultDuty,
+                offDutyPay = job.OffDutyPay,
+                grades = tempGrades,
+            });
+            
+            return result;
+        }
+
     }
 }

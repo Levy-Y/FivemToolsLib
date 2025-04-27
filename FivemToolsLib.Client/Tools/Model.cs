@@ -5,7 +5,7 @@ using CitizenFX.Core.Native;
 
 namespace FivemToolsLib.Client.Tools
 {
-    // public class Model
+    // public class Models
     // {
     //     public static async Task<bool> LoadModel(uint model)
     //     {
