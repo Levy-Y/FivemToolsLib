@@ -66,6 +66,4 @@ jobs:
             FivemToolsLib.Client\bin\Release\net452\FivemToolsLib.Client.xml
             FivemToolsLib.Server\bin\Release\net452\FivemToolsLib.Server.dll
             FivemToolsLib.Server\bin\Release\net452\FivemToolsLib.Server.xml
-          pattern: "FivemToolsLib.Client/nupkg/*.nupkg"
-                   "FivemToolsLib.Server/nupkg/*.nupkg"
           release-url: ${{ steps.create_release.outputs.upload_url }}
