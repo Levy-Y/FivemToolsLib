@@ -30,11 +30,17 @@ jobs:
         run: msbuild FivemToolsLib.sln /p:Configuration=Release
       
       - name: Pack client NuGet package
-        run: dotnet pack $env:CLIENT_PROJECT_PATH -c Release -p:Version=$(cat VERSION) --no-build --output .\FivemToolsLib.Client\nupkg
-
+        run: |
+          $version = Get-Content -Path "VERSION" -Raw
+          dotnet pack $env:CLIENT_PROJECT_PATH -c Release -p:Version=$version --no-build --output .\FivemToolsLib.Client\nupkg
+        shell: pwsh
+    
       - name: Pack server NuGet package
-        run: dotnet pack $env:SERVER_PROJECT_PATH -c Release -p:Version=$(cat VERSION) --no-build --output .\FivemToolsLib.Server\nupkg
-
+        run: |
+          $version = Get-Content -Path "VERSION" -Raw
+          dotnet pack $env:SERVER_PROJECT_PATH -c Release -p:Version=$version --no-build --output .\FivemToolsLib.Server\nupkg
+        shell: pwsh
+        
       - name: Push client NuGet package with version
         run: |
           $packageName = "FivemToolsLib.Client.$($(Get-Content -Path "VERSION" -Raw).Trim()).nupkg"
@@ -66,4 +72,6 @@ jobs:
             FivemToolsLib.Client\bin\Release\net452\FivemToolsLib.Client.xml
             FivemToolsLib.Server\bin\Release\net452\FivemToolsLib.Server.dll
             FivemToolsLib.Server\bin\Release\net452\FivemToolsLib.Server.xml
+            FivemToolsLib.Client\nupkg\*.nupkg
+            FivemToolsLib.Server\nupkg\*.nupkg
           release-url: ${{ steps.create_release.outputs.upload_url }}

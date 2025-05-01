@@ -2,6 +2,9 @@
 _layout: landing
 ---
 
+[![Trello Board](https://img.shields.io/badge/Trello-Board-blue?logo=trello)](https://trello.com/b/WEcYaTY8/fivemtoolslib) [![NuGet FivemToolsLib.Client](https://img.shields.io/nuget/v/FivemToolsLib.Client?label=FivemToolsLib.Client)](https://www.nuget.org/packages/FivemToolsLib.Client/)
+[![NuGet FivemToolsLib.Server](https://img.shields.io/nuget/v/FivemToolsLib.Server?label=FivemToolsLib.Server)](https://www.nuget.org/packages/FivemToolsLib.Server/)
+
 # FivemToolsLib — C# QBCore Wrapper & Tools for FiveM
 
 Welcome to **FivemToolsLib**, a utility library designed to bring **QBCore** support and general tooling to **C#-based FiveM resources**.

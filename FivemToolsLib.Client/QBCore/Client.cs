@@ -12,52 +12,86 @@ namespace FivemToolsLib.Client.QBCore
     /// </summary>
     public class Client
     {
-        private readonly dynamic _coreObject;
-        private dynamic _qbPlayer;
-        
+        private dynamic _coreObject;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="Client"/> class with the specified <see cref="BaseScript.Exports"/> object.
+        /// Initializes a new instance of the <see cref="Client"/> class with the specified <see cref="BaseScript.Exports"/>, and <see cref="BaseScript.EventHandlers"/> objects.
         /// </summary>
         /// <param name="exports">The dynamic <see cref="BaseScript.Exports"/> object</param>
-        public Client(dynamic exports)
+        /// <param name="eventHandlers">The dynamic <see cref="BaseScript.EventHandlers"/> object</param>
+        public Client(dynamic exports, EventHandlerDictionary eventHandlers)
         {
-            _coreObject = exports["qb-core"].GetCoreObject();
-            
-            if (_coreObject == null) 
+            try 
             {
-                Debug.WriteLine("Client: Core object is null, QBCore isn't initialized");
-                return;
-            }
-                
-            var player = _coreObject.Functions.GetPlayerData();
+                if (exports == null)
+                {
+                    Debug.WriteLine("Exports is null. Please ensure the server environment is correctly initialized.");
+                    return;
+                }
+        
+                if (exports["qb-core"] == null)
+                {
+                    Debug.WriteLine("qb-core export not found. Is QBCore running?");
+                    return;
+                }
 
-            if (player == null)
-            {
-                Debug.WriteLine("Client: Player cannot be found");
-                return;
+                _coreObject = exports["qb-core"]?.GetCoreObject();
+
+                if (_coreObject == null) 
+                {
+                    Debug.WriteLine("Client: Core object is null, QBCore might not be initialized yet");
+                    return;
+                }
+
+                if (eventHandlers == null)
+                {
+                    Debug.WriteLine("EventHandlers is null. Please ensure that event handlers are correctly set.");
+                    return;
+                }
+        
+                eventHandlers["QBCore:Client:UpdateObject"] += new Action(() =>
+                {
+                    try 
+                    {
+                        _coreObject = exports["qb-core"]?.GetCoreObject();
+                        Debug.WriteLine("Debug: Refreshed core object");
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Error refreshing core object: {ex.Message}");
+                    }
+                });
+        
+                Debug.WriteLine("Successful initialization");
             }
-            _qbPlayer = player;
-            
-            Debug.WriteLine("Successful initialization");
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Client initialization failed: {ex}");
+            }
         }
 
         /// <summary>
-        /// Refreshes the cached player data from QBCore.
+        /// Fetches the player data of the local player
         /// </summary>
-        private void ReFetchPlayerData()
+        /// <returns>A dynamic object representing the player data</returns>
+        private dynamic FetchPlayerData()
         {
-            _qbPlayer = _coreObject.Functions.GetPlayerData();
-        }
+            var player = _coreObject.Functions.GetPlayerData();
 
+            if (player != null) return player;
+            Debug.WriteLine("Client: Player data cannot be fetched");
+            return null;
+        }
+        
         /// <summary>
         /// Retrieves basic player data such as name, birthdate, and contact information.
         /// </summary>
         /// <returns>A <see cref="PlayerData"/> object with the character's personal details, or null if not found.</returns>
         public PlayerData GetPlayerData()
         {
-            ReFetchPlayerData();
+            var qbPlayer = FetchPlayerData();
             
-            if (_qbPlayer == null)
+            if (qbPlayer == null)
             {
                 Debug.WriteLine("Client: Player cannot be found");
                 return null;
@@ -65,13 +99,13 @@ namespace FivemToolsLib.Client.QBCore
 
             try
             {
-                string name = Convert.ToString(_qbPlayer.charinfo.firstname);
-                string label = Convert.ToString(_qbPlayer.charinfo.lastname);
-                string birthdate = Convert.ToString(_qbPlayer.charinfo.birthdate);
-                bool gender = Convert.ToBoolean(_qbPlayer.charinfo.gender);
-                string nationality = Convert.ToString(_qbPlayer.charinfo.nationality);
-                string phone = Convert.ToString(_qbPlayer.charinfo.phone);
-                string account = Convert.ToString(_qbPlayer.charinfo.account);
+                string name = Convert.ToString(qbPlayer.charinfo.firstname);
+                string label = Convert.ToString(qbPlayer.charinfo.lastname);
+                string birthdate = Convert.ToString(qbPlayer.charinfo.birthdate);
+                bool gender = Convert.ToBoolean(qbPlayer.charinfo.gender);
+                string nationality = Convert.ToString(qbPlayer.charinfo.nationality);
+                string phone = Convert.ToString(qbPlayer.charinfo.phone);
+                string account = Convert.ToString(qbPlayer.charinfo.account);
                 
                 return new PlayerData(name, label, birthdate, gender, nationality, phone, account);
             }
@@ -88,9 +122,9 @@ namespace FivemToolsLib.Client.QBCore
         /// <returns>A <see cref="JobData"/> object, or null if data is missing or invalid.</returns>
         public JobData GetPlayerJobData()
         {
-            ReFetchPlayerData();
+            var qbPlayer = FetchPlayerData();
             
-            if (_qbPlayer == null)
+            if (qbPlayer == null)
             {
                 Debug.WriteLine("Client: Player cannot be found");
                 return null;
@@ -98,7 +132,7 @@ namespace FivemToolsLib.Client.QBCore
 
             try
             {
-                var job = _qbPlayer.job;
+                var job = qbPlayer.job;
 
                 string name = Convert.ToString(job.name);
                 string label = Convert.ToString(job.label);
@@ -121,9 +155,9 @@ namespace FivemToolsLib.Client.QBCore
         /// <returns>A <see cref="GangData"/> object, or null if data is missing or invalid.</returns>
         public GangData GetPlayerGangData()
         {
-            ReFetchPlayerData();
+            var qbPlayer = FetchPlayerData();
             
-            if (_qbPlayer == null)
+            if (qbPlayer == null)
             {
                 Debug.WriteLine("Client: Player cannot be found");
                 return null;
@@ -132,7 +166,7 @@ namespace FivemToolsLib.Client.QBCore
             
             try
             {
-                var gangInfo = _qbPlayer.gang;
+                var gangInfo = qbPlayer.gang;
                 
                 string name = Convert.ToString(gangInfo.name);
                 string label = Convert.ToString(gangInfo.label);
@@ -153,15 +187,15 @@ namespace FivemToolsLib.Client.QBCore
         /// <returns>A <see cref="Metadata"/> object, or null if data is missing or invalid.</returns>
         public Metadata GetPlayerMetadata()
         {
-            ReFetchPlayerData();
+            var qbPlayer = FetchPlayerData();
             
-            if (_qbPlayer == null)
+            if (qbPlayer == null)
             {
                 Debug.WriteLine("Client: Player cannot be found");
                 return null;
             }
 
-            var metadata = _qbPlayer.metadata;
+            var metadata = qbPlayer.metadata;
             
             try
             {

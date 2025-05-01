@@ -13,11 +13,11 @@ namespace FivemToolsLib.Server.QBCore.Models
         /// <summary>
         /// Not sure of the type `bool` needs research
         /// </summary>
-        public bool Combinable { get; }
+        public bool? Combinable { get; }
         public string Description { get; }
 
         public Item(string name, string label, int weight, string type, string image, bool unique, bool useable, bool shouldClose,
-            bool combinable, string description)
+            bool? combinable, string description)
         {
             Name = name;
             Label = label;

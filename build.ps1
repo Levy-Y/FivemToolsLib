@@ -29,6 +29,15 @@ function tag {
         return
     }
 
+    Write-Output "Current version from VERSION file: $version"
+    Write-Host "Are you sure you want to tag this version? Type 'yes' to confirm: " -NoNewline
+    $confirmation = Read-Host
+
+    if ($confirmation -ne "yes") {
+        Write-Warning "Tagging cancelled."
+        return
+    }
+
     $tagName = "fivemtoolslib/v$version"
 
     git tag $tagName
@@ -48,6 +57,8 @@ function cleanup {
         ".\FivemToolsLib.Server\bin\",
         ".\FivemToolsLib.Server\obj\",
         ".\FivemToolsLib.Server\nupkg",
+        ".\bin\",
+        ".\obj\",
         ".\_site\",
         ".\api\"
     )

@@ -13,7 +13,7 @@ Once installed, you can begin using the library in your scripts.
     { 
         public  MyClientScript()
         { 
-            var qbCore = new FivemToolsLib.Client.QBCore.Client(Exports);
+            var qbCore = new FivemToolsLib.Client.QBCore.Client(Exports, EventHandlers);
 
             qbCore.Notify("My first notification", NotifyTypes.SUCCESS);
         }

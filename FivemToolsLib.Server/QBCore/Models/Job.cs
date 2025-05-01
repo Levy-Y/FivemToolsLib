@@ -7,9 +7,9 @@ namespace FivemToolsLib.Server.QBCore.Models
         public string Label { get; }
         public bool DefaultDuty { get; }
         public bool OffDutyPay { get; }
-        public Dictionary<int, Grade> Grades { get; }
+        public Dictionary<int, JobGrade> Grades { get; }
 
-        public Job(string label, bool defaultDuty, bool offDutyPay, Dictionary<int, Grade> grades)
+        public Job(string label, bool defaultDuty, bool offDutyPay, Dictionary<int, JobGrade> grades)
         {
             Label = label;
             DefaultDuty = defaultDuty;
@@ -18,12 +18,12 @@ namespace FivemToolsLib.Server.QBCore.Models
         }
     }
 
-    public class Grade
+    public class JobGrade
     {
         public string Name { get; }
         public int Payment { get; }
 
-        public Grade(string name, int payment)
+        public JobGrade(string name, int payment)
         {
             Name = name;
             Payment = payment;
