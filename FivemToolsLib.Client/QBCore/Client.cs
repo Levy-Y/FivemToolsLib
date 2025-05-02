@@ -34,15 +34,15 @@ namespace FivemToolsLib.Client.QBCore
                     Debug.WriteLine("qb-core export not found. Is QBCore running?");
                     return;
                 }
-
+        
                 _coreObject = exports["qb-core"]?.GetCoreObject();
-
+        
                 if (_coreObject == null) 
                 {
                     Debug.WriteLine("Client: Core object is null, QBCore might not be initialized yet");
                     return;
                 }
-
+        
                 if (eventHandlers == null)
                 {
                     Debug.WriteLine("EventHandlers is null. Please ensure that event handlers are correctly set.");
