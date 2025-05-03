@@ -5,4 +5,11 @@ namespace FivemToolsLib.Server.QBCore.Enums
         CASH,
         BANK
     }
+
+    public enum Positions
+    {
+        LEFT,
+        RIGHT,
+        TOP
+    }
 }

@@ -7,25 +7,48 @@ Once installed, you can begin using the library in your scripts.
 
 ```csharp
 
-    using FivemToolsLib.Client.QBCore;
+    using static FivemToolsLib.Client.QBCore.Client;
 
     public class ClientMain : BaseScript 
     { 
-        public  MyClientScript()
+        public ClientMain()
         { 
-            var qbCore = new FivemToolsLib.Client.QBCore.Client(Exports, EventHandlers);
-
-            qbCore.Notify("My first notification", NotifyTypes.SUCCESS);
+            Notify("My first notification", NotifyTypes.SUCCESS);
         }
     }
-
 ```
 
 This will show a QBCore-styled success notification when the script runs.
 
 ----------
 
-## 3. Next Steps
+# Server
+
+### Example: Adding a job programatically (advanced)
+
+```csharp
+
+    using static FivemToolsLib.Server.QBCore.Server;
+
+    public class ServerMain : BaseScript 
+    { 
+        public ServerMain()
+        { 
+            AddJob("taxi", new Job("Taxi", true, false, new Dictionary<int, JobGrade>
+            {
+                { 2, new JobGrade("Boss", 1000) },
+                { 1, new JobGrade("Manager", 100) },
+                { 0, new JobGrade("Driver", 10) },
+            }));        
+        }
+    }
+```
+
+This will create a new job `taxi`, with 3 grades: `Boss`, `Manager`, `Driver`. And set their salaries to `1000`, `100`, `10`.
+
+---
+
+## Next Steps
 
 - Browse the [API Reference](/api/FivemToolsLib.Client.NativeWrappers.html) for available classes and methods.
 
@@ -35,13 +58,10 @@ This will show a QBCore-styled success notification when the script runs.
 
 ## Troubleshooting
 
--  **Nothing shows up?** Make sure QBCore is properly initialized and available on the client.
+-  **Nothing shows up?** Make sure QBCore is properly initialized and available on your server.
 
--  **Missing methods or types?** Check your project is referencing the correct version of the DLL.
+-  **Missing methods or types?** Check your project is referencing the correct version of the **DLL** / **NuGet package**.
 
 -  **Target framework mismatch?** Double-check you're using **.NET Framework 4.5.2**, not newer .NET versions like Core or 6+.
 
-----------
 
-# Server
-> More examples are coming soon!

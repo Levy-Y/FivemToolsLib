@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using FivemToolsLib.Client.QBCore.Models;
 using Prop = FivemToolsLib.Client.QBCore.Models.Prop;
 
@@ -10,17 +8,28 @@ namespace FivemToolsLib.Client.QBCore
     /// <summary>
     /// Provides high-level client utilities for interacting with QBCore functions.
     /// </summary>
-    public class Client
+    public static class Client
     {
-        private dynamic _coreObject;
+        private static dynamic _coreObject;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Client"/> class with the specified <see cref="BaseScript.Exports"/>, and <see cref="BaseScript.EventHandlers"/> objects.
+        /// Static constructor for the <see cref="Client"/> class. 
+        /// Initializes the QBCore export and event handlers required for client functionality.
+        /// 
+        /// It retrieves the exports and event handlers using the <see cref="Helper"/> class,
+        /// verifies the presence of the "qb-core" export, and attempts to obtain the QBCore core object.
+        /// If the export or core object is missing, appropriate debug messages are logged.
+        /// 
+        /// Also registers an event handler for "QBCore:Client:UpdateObject" to refresh the core object at runtime.
         /// </summary>
-        /// <param name="exports">The dynamic <see cref="BaseScript.Exports"/> object</param>
-        /// <param name="eventHandlers">The dynamic <see cref="BaseScript.EventHandlers"/> object</param>
-        public Client(dynamic exports, EventHandlerDictionary eventHandlers)
+        /// <exception cref="Exception">
+        /// Thrown if an unexpected error occurs during initialization.
+        /// </exception>
+        static Client()
         {
+            var exports = new Helper().GetExportDictionary();
+            var eventHandlers = new Helper().GetEventHandlerDictionary();
+            
             try 
             {
                 if (exports == null)
@@ -67,6 +76,7 @@ namespace FivemToolsLib.Client.QBCore
             catch (Exception ex)
             {
                 Debug.WriteLine($"Client initialization failed: {ex}");
+                throw;
             }
         }
 
@@ -74,7 +84,7 @@ namespace FivemToolsLib.Client.QBCore
         /// Fetches the player data of the local player
         /// </summary>
         /// <returns>A dynamic object representing the player data</returns>
-        private dynamic FetchPlayerData()
+        private static dynamic FetchPlayerData()
         {
             var player = _coreObject.Functions.GetPlayerData();
 
@@ -87,7 +97,7 @@ namespace FivemToolsLib.Client.QBCore
         /// Retrieves basic player data such as name, birthdate, and contact information.
         /// </summary>
         /// <returns>A <see cref="PlayerData"/> object with the character's personal details, or null if not found.</returns>
-        public PlayerData GetPlayerData()
+        public static PlayerData GetPlayerData()
         {
             var qbPlayer = FetchPlayerData();
             
@@ -120,7 +130,7 @@ namespace FivemToolsLib.Client.QBCore
         /// Retrieves the player's job data including role, duty status, and wage.
         /// </summary>
         /// <returns>A <see cref="JobData"/> object, or null if data is missing or invalid.</returns>
-        public JobData GetPlayerJobData()
+        public static JobData GetPlayerJobData()
         {
             var qbPlayer = FetchPlayerData();
             
@@ -153,7 +163,7 @@ namespace FivemToolsLib.Client.QBCore
         /// Retrieves the player's gang affiliation data.
         /// </summary>
         /// <returns>A <see cref="GangData"/> object, or null if data is missing or invalid.</returns>
-        public GangData GetPlayerGangData()
+        public static GangData GetPlayerGangData()
         {
             var qbPlayer = FetchPlayerData();
             
@@ -185,7 +195,7 @@ namespace FivemToolsLib.Client.QBCore
         /// Retrieves the player's metadata such as hunger, thirst, stress, and death state.
         /// </summary>
         /// <returns>A <see cref="Metadata"/> object, or null if data is missing or invalid.</returns>
-        public Metadata GetPlayerMetadata()
+        public static Metadata GetPlayerMetadata()
         {
             var qbPlayer = FetchPlayerData();
             
@@ -218,7 +228,7 @@ namespace FivemToolsLib.Client.QBCore
         /// </summary>
         /// <param name="message">The message to display.</param>
         /// <param name="type">The type of notification (success, info, warning, error).</param>
-        public void Notify(string message, NotifyTypes type)
+        public static void Notify(string message, NotifyTypes type)
         {
             _coreObject.Functions.Notify(message, type.ToString().ToLower());
         }
@@ -228,7 +238,7 @@ namespace FivemToolsLib.Client.QBCore
         /// </summary>
         /// <param name="itemName">The name of the item to check for.</param>
         /// <returns>True if the item exists in the inventory, otherwise false.</returns>
-        public bool HasItem(string itemName)
+        public static bool HasItem(string itemName)
         {
             return (bool)_coreObject.Functions.HasItem(itemName);
         }
@@ -247,7 +257,7 @@ namespace FivemToolsLib.Client.QBCore
         /// <param name="propTwo">Optional second prop to attach during the progress bar.</param>
         /// <param name="onFinish">Callback to run when progress finishes successfully.</param>
         /// <param name="onCancel">Callback to run if progress is canceled.</param>
-        public void Progressbar(
+        public static void Progressbar(
             string name,
             string label,
             int duration,
@@ -318,7 +328,7 @@ namespace FivemToolsLib.Client.QBCore
         /// </summary>
         /// <param name="position">The position to search from.</param>
         /// <returns>The handle of the closest ped, or 0 if none found.</returns>
-        public int GetClosestPed(Vector3 position)
+        public static int GetClosestPed(Vector3 position)
         {
             try
             {
@@ -337,7 +347,7 @@ namespace FivemToolsLib.Client.QBCore
         /// </summary>
         /// <param name="position">The position to search from.</param>
         /// <returns>The handle of the closest vehicle, or 0 if none found.</returns>
-        public int GetClosestVehicle(Vector3 position)
+        public static int GetClosestVehicle(Vector3 position)
         {
             try
             {
@@ -356,7 +366,7 @@ namespace FivemToolsLib.Client.QBCore
         /// </summary>
         /// <param name="position">The position to search from.</param>
         /// <returns>The handle of the closest object, or 0 if none found.</returns>
-        public int GetClosestObject(Vector3 position)
+        public static int GetClosestObject(Vector3 position)
         {
             try
             {
@@ -375,7 +385,7 @@ namespace FivemToolsLib.Client.QBCore
         /// </summary>
         /// <param name="vehicle">The vehicle entity to get the plate from.</param>
         /// <returns>The license plate string.</returns>
-        public string GetPlate(Vehicle vehicle) 
+        public static string GetPlate(Vehicle vehicle)
         {
             return (string)_coreObject.Functions.GetPlate(vehicle);
         }

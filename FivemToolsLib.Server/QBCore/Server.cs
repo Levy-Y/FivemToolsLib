@@ -12,31 +12,49 @@ namespace FivemToolsLib.Server.QBCore
     /// <summary>
     /// W.I.P Limited functionality, not all the commands are supported from the QB framework
     /// </summary>
-    public class Server
+    public static class Server
     {
-        private dynamic _coreObject;
+        private static dynamic _coreObject;
 
-        public Server(dynamic exports, EventHandlerDictionary eventHandlers)
+        static Server()
         {
-            _coreObject = exports["qb-core"].GetCoreObject();
+            var exports = new Helper().GetExportDictionary();
+            var eventHandlers = new Helper().GetEventHandlerDictionary();
 
-            if (_coreObject == null) 
-            {
-                Debug.WriteLine("Server: Core object is null, QBCore isn't initialized");
-                return;
-            }
-
-            eventHandlers["QBCore:Server:UpdateObject"] += new Action(() =>
+            try
             {
                 _coreObject = exports["qb-core"].GetCoreObject();
+
+                if (_coreObject == null) 
+                {
+                    Debug.WriteLine("Server: Core object is null, QBCore isn't initialized");
+                    return;
+                }
+
+                eventHandlers["QBCore:Server:UpdateObject"] += new Action(() =>
+                {
+                    try 
+                    {
+                        _coreObject = exports["qb-core"]?.GetCoreObject();
+                        Debug.WriteLine("Debug: Refreshed core object");
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Error refreshing core object: {ex.Message}");
+                    }
+                });
                 
-                Debug.WriteLine("Debug: Refreshed core object");
-            });
+                Debug.WriteLine("Successful initialization");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Client initialization failed: {ex}");
+                throw;
+            }
             
-            Debug.WriteLine("Successful initialization");
         }
         
-        private dynamic FetchPlayer(int source)
+        private static dynamic FetchPlayer(int source)
         {
             var player = _coreObject.Functions.GetPlayer(source);
             
@@ -49,7 +67,7 @@ namespace FivemToolsLib.Server.QBCore
             return player;
         }
         
-        public void UpdatePlayerData(int source)
+        public static void UpdatePlayerData(int source)
         {
             var player = FetchPlayer(source);
             
@@ -62,7 +80,7 @@ namespace FivemToolsLib.Server.QBCore
             player.Functions.UpdatePlayerData();
         }
         
-        public bool SetJob(int source, string jobName, int grade)
+        public static bool SetJob(int source, string jobName, int grade)
         {
             var player = FetchPlayer(source);
             
@@ -75,7 +93,7 @@ namespace FivemToolsLib.Server.QBCore
             return (bool)player.Functions.SetJob(jobName, grade);
         }
         
-        public bool SetGang(int source, string gangName, int grade)
+        public static bool SetGang(int source, string gangName, int grade)
         {
             var player = FetchPlayer(source);
             
@@ -88,7 +106,7 @@ namespace FivemToolsLib.Server.QBCore
             return (bool)player.Functions.SetGang(gangName, grade);
         }
         
-        public string GetName(int source)
+        public static string GetName(int source)
         {
             var player = FetchPlayer(source);
             
@@ -101,7 +119,7 @@ namespace FivemToolsLib.Server.QBCore
             return (string)player.Functions.GetName();
         }
         
-        public bool AddMoney(int source, MoneyTypes type, int amount)
+        public static bool AddMoney(int source, MoneyTypes type, int amount)
         {
             var player = FetchPlayer(source);
             
@@ -114,7 +132,7 @@ namespace FivemToolsLib.Server.QBCore
             return (bool)player.Functions.AddMoney(type.ToString().ToLower(), amount);
         }
         
-        public bool RemoveMoney(int source, MoneyTypes type, int amount)
+        public static bool RemoveMoney(int source, MoneyTypes type, int amount)
         {
             var player = FetchPlayer(source);
 
@@ -128,7 +146,7 @@ namespace FivemToolsLib.Server.QBCore
             return (bool)player.Functions.RemoveMoney(type.ToString().ToLower(), amount);
         }
         
-        public bool SetMoney(int source, MoneyTypes type, int amount)
+        public static bool SetMoney(int source, MoneyTypes type, int amount)
         {
             var player = FetchPlayer(source);
 
@@ -142,7 +160,7 @@ namespace FivemToolsLib.Server.QBCore
             return (bool)player.Functions.SetMoney(type.ToString().ToLower(), amount);
         }
         
-        public bool GetMoney(int source, MoneyTypes type)
+        public static bool GetMoney(int source, MoneyTypes type)
         {
             var player = FetchPlayer(source);
 
@@ -156,7 +174,7 @@ namespace FivemToolsLib.Server.QBCore
             return (bool)player.Functions.GetMoney(type.ToString().ToLower());
         }
         
-        public void Save(int source)
+        public static void Save(int source)
         {
             var player = FetchPlayer(source);
 
@@ -170,7 +188,7 @@ namespace FivemToolsLib.Server.QBCore
             player.Functions.Save();
         }
         
-        public void Logout(int source)
+        public static void Logout(int source)
         {
             var player = FetchPlayer(source);
 
@@ -185,7 +203,7 @@ namespace FivemToolsLib.Server.QBCore
         }
         
         // TODO: Test dynamic method's return type
-        public object GetQbPlayers()
+        public static object GetQbPlayers()
         {            
             return _coreObject.Functions.GetQBPlayers();
         }
@@ -196,7 +214,7 @@ namespace FivemToolsLib.Server.QBCore
         /// </summary>
         /// <param name="itemName">The name of the item</param>
         /// <param name="action">The action to run when the item is used</param>
-        public void CreateUsableItem(string itemName, Action<int, ExpandoObject> action)
+        public static void CreateUsableItem(string itemName, Action<int, ExpandoObject> action)
         {            
             _coreObject.Functions.CreateUseableItem(itemName, action);
         }
@@ -206,7 +224,7 @@ namespace FivemToolsLib.Server.QBCore
         /// </summary>
         /// <param name="itemName">The name of the item to check for usability.</param>
         /// <returns>True if the item is usable, false otherwise.</returns>
-        public bool CanUseItem(string itemName)
+        public static bool CanUseItem(string itemName)
         {            
             return _coreObject.Functions.CanUseItem(itemName) != null;
         }
@@ -218,7 +236,7 @@ namespace FivemToolsLib.Server.QBCore
         /// <returns>
         /// An <see cref="Item"/> object representing the shared item if found and constructed successfully; otherwise, <c>null</c>.
         /// </returns>
-        public Item GetItem(string itemName)
+        public static Item GetItem(string itemName)
         {            
             var items = _coreObject.Shared.Items;
 
@@ -243,13 +261,91 @@ namespace FivemToolsLib.Server.QBCore
             }
         }
 
+        /// <summary>
+        /// Retrieves a shared job definition from the core object by its name and constructs a corresponding <see cref="Job"/> instance.
+        /// </summary>
+        /// <param name="jobName">The name (identifier) of the job to retrieve.</param>
+        /// <returns>
+        /// A <see cref="Job"/> object representing the shared job if found and constructed successfully; otherwise, <c>null</c>.
+        /// </returns>
+        public static Job GetJob(string jobName)
+        {            
+            var jobs = _coreObject.Shared.Jobs;
+
+            dynamic sharedJob = ((IDictionary<string, object>)jobs)[jobName];
+            
+            if (sharedJob == null)
+            {
+                Debug.WriteLine($"Server: Job '{jobName}' cannot be found");
+                return null;
+            }
+            
+            try
+            {
+                var grades = sharedJob.grades;
+                var gradesDict = new Dictionary<int, JobGrade>();
+
+                foreach (var kvp in grades)
+                { 
+                    var grade = kvp.Value;
+                    gradesDict[Convert.ToInt32(kvp.Key)] = new JobGrade(Convert.ToString(grade.name), Convert.ToInt32(grade.payment));
+                }
+                
+                return new Job(sharedJob.label, sharedJob.defaultDuty, sharedJob.offDutyPay, gradesDict);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error constructing job '{jobName}': {ex.Message}");
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// Retrieves a shared gang definition from the core object by its name and constructs a corresponding <see cref="Gang"/> instance.
+        /// </summary>
+        /// <param name="gangName">The name (identifier) of the gang to retrieve.</param>
+        /// <returns>
+        /// A <see cref="Gang"/> object representing the shared gang if found and constructed successfully; otherwise, <c>null</c>.
+        /// </returns>
+        public static Gang GetGang(string gangName)
+        {            
+            var gangs = _coreObject.Shared.Jobs;
+
+            dynamic sharedGang = ((IDictionary<string, object>)gangs)[gangName];
+            
+            if (sharedGang == null)
+            {
+                Debug.WriteLine($"Server: Gang '{gangName}' cannot be found");
+                return null;
+            }
+            
+            try
+            {
+                var grades = sharedGang.grades;
+                var gradesDict = new Dictionary<int, GangGrade>();
+
+                foreach (var kvp in grades)
+                { 
+                    var grade = kvp.Value;
+                    gradesDict[Convert.ToInt32(kvp.Key)] = new GangGrade(Convert.ToString(grade.name));
+                }
+                
+                return new Gang(sharedGang.label, gradesDict);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error constructing gang '{gangName}': {ex.Message}");
+                return null;
+            }
+        }
+        
         // TODO: Not working, search for a valid fix!
         /// <summary>
         /// INVALID METHOD — Not working at the moment!
         /// </summary>
         /// <param name="source"></param>
         /// <param name="itemName"></param>
-        public void UseItem(int source, string itemName)
+        public static void UseItem(int source, string itemName)
         {            
             _coreObject.Functions.UseItem(source, itemName);
         }
@@ -262,22 +358,22 @@ namespace FivemToolsLib.Server.QBCore
         /// <param name="reason"></param>
         /// <param name="setKickReason"></param>
         /// <param name="deferrals"></param>
-        public void Kick(int source, string reason, bool setKickReason, bool deferrals)
+        public static void Kick(int source, string reason, bool setKickReason, bool deferrals)
         {            
             _coreObject.Functions.Kick(source, reason, setKickReason, deferrals);
         }
 
-        public void AddPermission(int source, string permission)
+        public static void AddPermission(int source, string permission)
         {            
             _coreObject.Functions.AddPermission(source, permission);
         }
 
-        public void RemovePermission(int source, string permission)
+        public static void RemovePermission(int source, string permission)
         {            
             _coreObject.Functions.RemovePermission(source, permission);
         }
 
-        public bool HasPermission(int source, string permission)
+        public static bool HasPermission(int source, string permission)
         {            
             return (bool)_coreObject.Functions.HasPermission(source, permission);
         }
@@ -287,7 +383,7 @@ namespace FivemToolsLib.Server.QBCore
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public Dictionary<string, bool> GetPermission(int source)
+        public static Dictionary<string, bool> GetPermission(int source)
         {
             var permissions = _coreObject.Functions.GetPermission(source);
 
@@ -302,14 +398,42 @@ namespace FivemToolsLib.Server.QBCore
             return new Dictionary<string, bool>();
         }
 
-        public bool IsPlayerBanned(int source)
+        public static bool IsPlayerBanned(int source)
         {            
             return (bool)_coreObject.Functions.IsPlayerBanned(source);
         }
 
-        public bool IsLicenseInUse(int source)
+        public static bool IsLicenseInUse(int source)
         {            
             return (bool)_coreObject.Functions.IsLicenseInUse(source);
+        }
+
+        /// <summary>
+        /// <b>GLOBAL</b> — All the players on the server will receive this
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="position"></param>
+        public static void DrawGlobalText(string message, Positions position)
+        {
+            BaseScript.TriggerClientEvent("qb-core:client:DrawText", message, position.ToString().ToLower());
+        }
+        
+        /// <summary>
+        /// <b>GLOBAL</b> — All the players on the server will receive this
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="position"></param>
+        public static void ChangeGlobalText(string message, Positions position)
+        {
+            BaseScript.TriggerClientEvent("qb-core:client:ChangeText", message, position.ToString().ToLower());
+        }
+        
+        /// <summary>
+        /// <b>GLOBAL</b> — All the players on the server will receive this
+        /// </summary>
+        public static void HideGlobalText()
+        {
+            BaseScript.TriggerClientEvent("qb-core:client:HideText");
         }
         
         /// <summary>
@@ -318,7 +442,7 @@ namespace FivemToolsLib.Server.QBCore
         /// <param name="itemName"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool AddItem(string itemName, Item item)
+        public static bool AddItem(string itemName, Item item)
         {            
             bool result = _coreObject.Functions.AddItem(itemName, new
             {
@@ -343,7 +467,7 @@ namespace FivemToolsLib.Server.QBCore
         /// <param name="jobName"></param>
         /// <param name="job"></param>
         /// <returns></returns>
-        public bool AddJob(string jobName, Job job)
+        public static bool AddJob(string jobName, Job job)
         {            
             var tempGrades = new Dictionary<string, object>();
             
@@ -374,7 +498,7 @@ namespace FivemToolsLib.Server.QBCore
         /// <param name="gangName"></param>
         /// <param name="gang"></param>
         /// <returns></returns>
-        public bool AddGang(string gangName, Gang gang)
+        public static bool AddGang(string gangName, Gang gang)
         {            
             var tempGrades = new Dictionary<string, object>();
             
