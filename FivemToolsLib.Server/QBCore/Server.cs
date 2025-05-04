@@ -339,16 +339,20 @@ namespace FivemToolsLib.Server.QBCore
             }
         }
         
-        // TODO: Not working, search for a valid fix!
         /// <summary>
-        /// INVALID METHOD — Not working at the moment!
+        /// 
         /// </summary>
         /// <param name="source"></param>
         /// <param name="itemName"></param>
         public static void UseItem(int source, string itemName)
-        {            
-            _coreObject.Functions.UseItem(source, itemName);
+        {
+            BaseScript.TriggerClientEvent("QBCore:Client:UseItem", source, itemName);
         }
+
+        public static void ShowMe3D(int source, string message)
+        {
+            BaseScript.TriggerClientEvent("QBCore:Command:ShowMe3D", source, message);
+        } 
 
         // TODO: setKickReason: true causes a qbcore error
         /// <summary>
@@ -519,5 +523,16 @@ namespace FivemToolsLib.Server.QBCore
             
             return result;
         }
+        
+        /// <summary>
+        /// Sends a notification to a player via the built-in notification system.
+        /// </summary>
+        /// <param name="source">The player to send the notification to.</param>
+        /// <param name="message">The message to display.</param>
+        /// <param name="type">The type of notification (success, info, warning, error).</param>
+        public static void Notify(int source, string message, NotifyTypes type)
+        {
+            BaseScript.TriggerClientEvent("QBCore:Notify", source, message, type.ToString().ToLower());
+        }    
     }
 }

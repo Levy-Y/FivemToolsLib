@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using FivemToolsLib.Client.QBCore.Models;
 using Prop = FivemToolsLib.Client.QBCore.Models.Prop;
 
@@ -232,6 +234,16 @@ namespace FivemToolsLib.Client.QBCore
         {
             _coreObject.Functions.Notify(message, type.ToString().ToLower());
         }
+
+        public static void UseItem(string itemName)
+        {
+            BaseScript.TriggerEvent("QBCore:Client:UseItem", itemName);
+        }
+
+        public static void ShowMe3D(string message)
+        {
+            BaseScript.TriggerEvent("QBCore:Command:ShowMe3D", API.PlayerId(), message);
+        }
         
         /// <summary>
         /// Checks if the player has a specific item in their inventory.
@@ -377,6 +389,54 @@ namespace FivemToolsLib.Client.QBCore
             {
                 Debug.WriteLine($"Error in GetClosestObject: {ex.Message}");
                 return 0;
+            }
+        }
+        
+        /// <summary>
+        /// Returns the entity handle of the closest player to a given position.
+        /// </summary>
+        /// <param name="position">The position to search from.</param>
+        /// <returns>The handle of the closest player, or 0 if none found.</returns>
+        public static int GetClosestPlayer(Vector3 position)
+        {
+            try
+            {
+                var playerHandle = _coreObject.Functions.GetClosestPlayer(position);
+                return (int)playerHandle;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in GetClosestPlayer: {ex.Message}");
+                return 0;
+            }
+        }
+
+        // TODO: UNTESTED; Check for potential cast errors.
+        /// <summary>
+        /// Returns all players within a radius of specific coordinates.
+        /// </summary>
+        /// <param name="position">The position to search from.</param>
+        /// <param name="radius">The radius to search in.</param>
+        /// <returns>The handle of the closest object, or 0 if none found.</returns>
+        public static int[] GetPlayersFromCoords(Vector3 position, int radius)
+        {
+            try
+            {
+                var foundPlayerDict = _coreObject.Functions.GetPlayersFromCoords(position, radius);
+                
+                var players = new int[foundPlayerDict.Count];
+
+                foreach (var kvp in foundPlayerDict)
+                {
+                    players[kvp.Key] = kvp.Value;
+                }
+                
+                return players;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in GetPlayersFromCoords: {ex.Message}");
+                return new int[0];
             }
         }
         

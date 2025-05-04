@@ -68,10 +68,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           files: |
-            FivemToolsLib.Client\bin\Release\net452\FivemToolsLib.Client.dll
+            FivemToolsLib.Client\bin\Release\net452\FivemToolsLib.Client.net.dll
             FivemToolsLib.Client\bin\Release\net452\FivemToolsLib.Client.xml
             FivemToolsLib.Server\bin\Release\net452\FivemToolsLib.Server.dll
             FivemToolsLib.Server\bin\Release\net452\FivemToolsLib.Server.xml
-            FivemToolsLib.Client\nupkg\*.nupkg
-            FivemToolsLib.Server\nupkg\*.nupkg
           release-url: ${{ steps.create_release.outputs.upload_url }}
