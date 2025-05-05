@@ -2,3 +2,5 @@
   href: getting-started.md
 - name: Examples
   href: examples.md
+- name: Wrapper Functionality
+  href: features.md
