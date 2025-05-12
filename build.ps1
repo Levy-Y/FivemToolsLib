@@ -15,7 +15,7 @@ function build {
 
 function docs {
     Write-Output "Building documentation pages..."
-    docfx .\docfx.json
+    docfx .\docfx.json --serve
 }
 
 function tag {

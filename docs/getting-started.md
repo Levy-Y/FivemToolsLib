@@ -38,6 +38,6 @@ The recommended way to install FivemToolsLib is via NuGet:
 
 ```xml
 <ItemGroup>
-    <Reference Include="FivemToolsLib.Client" HintPath="libs/FivemToolsLib.Client.dll"/>
+    <Reference Include="FivemToolsLib.Client" HintPath="libs/FivemToolsLib.Client.net.dll"/>
 </ItemGroup>
 ```

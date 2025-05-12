@@ -28,7 +28,7 @@ This will show a QBCore-styled success notification when the script runs.
 
 ```csharp
 
-    using static FivemToolsLib.Server.QBCore.Server;
+    using static FivemToolsLib.Server.QBCore.Jobs;
 
     public class ServerMain : BaseScript 
     { 

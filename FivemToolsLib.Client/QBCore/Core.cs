@@ -10,12 +10,12 @@ namespace FivemToolsLib.Client.QBCore
     /// <summary>
     /// Provides high-level client utilities for interacting with QBCore functions.
     /// </summary>
-    public static class Client
+    public static class Core
     {
         private static dynamic _coreObject;
 
         /// <summary>
-        /// Static constructor for the <see cref="Client"/> class. 
+        /// Static constructor for the <see cref="Core"/> class. 
         /// Initializes the QBCore export and event handlers required for client functionality.
         /// 
         /// It retrieves the exports and event handlers using the <see cref="Helper"/> class,
@@ -27,7 +27,7 @@ namespace FivemToolsLib.Client.QBCore
         /// <exception cref="Exception">
         /// Thrown if an unexpected error occurs during initialization.
         /// </exception>
-        static Client()
+        static Core()
         {
             var exports = new Helper().GetExportDictionary();
             var eventHandlers = new Helper().GetEventHandlerDictionary();

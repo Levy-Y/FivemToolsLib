@@ -13,7 +13,7 @@
   - [ ] CreateCallback
   - [x] CreateUseableItem
   - [x] CanUseItem
-  - [x] UseItem (implemented using the `QBCore:Client:UseItem`) (untested)
+  - [ ] UseItem
   - [x] Kick
   - [x] AddPermission
   - [x] RemovePermission
@@ -26,7 +26,7 @@
     - [x] SetJob
     - [x] SetGang
     - [x] Notify (implemented using the `QBCore:Notify`)
-    - [ ] HasItem
+    - [x] HasItem
     - [x] GetName
     - [ ] SetJobDuty
     - [ ] SetPlayerData
@@ -71,8 +71,7 @@
   - [ ] SetVehicleProperties
   - ### [Events](https://docs.qbcore.org/qbcore-documentation/qb-core/client-event-reference)
     - [x] Notify (not in this form, but using the `QBcore.Functions.Notify()`)
-    - [x] UseItem (untested)
-    - [x] ShowMe3D (untested)
+    - [x] ShowMe3D
     - [x] UpdateObject (isn't needed, the wrapper does everything under the hood)
   - ### [Exports](https://docs.qbcore.org/qbcore-documentation/qb-core/drawtext)
     - [ ] DrawText
@@ -83,28 +82,38 @@
 ## [Shared (tables)](https://docs.qbcore.org/qbcore-documentation/qb-core/shared)
   - [x] QBShared.Items{ }
     - [x] GetItem
-    - [ ] GetItems
+    - [x] GetItems
   - [x] QBShared.Jobs{ }
     - [x] GetJob
-    - [ ] GetJobs
+    - [x] GetJobs
   - [x] QBShared.Gangs{ }
     - [x] GetGang
-    - [ ] GetGangs
-  - [ ] QBShared.Vehicles
+    - [x] GetGangs
+  - [ ] QBShared.Vehicles{ }
     - [ ] GetVehicle
     - [ ] GetVehicles
-  - [ ] QBShared.Weapons
-    - [ ] AddWeapon
-    - [ ] AddWeapons
-    - [ ] GetWeapon
-    - [ ] GetWeapons
+  - [x] QBShared.Weapons{ }
+    - [x] AddWeapon
+    - [x] AddWeapons
+    - [x] UpdateWeapon
+    - [x] GetWeapon
+    - [x] GetWeapons
   - ### [Exports](https://docs.qbcore.org/qbcore-documentation/qb-core/shared-exports)
     - [x] AddItem
-    - [ ] AddItems
+    - [x] AddItems
+    - [x] UpdateItem
+    - [x] RemoveItem
+    - [x] RemoveItems
     - [x] AddJob
-    - [ ] AddJobs
+    - [x] AddJobs
+    - [x] UpdateJob
+    - [x] RemoveJob
+    - [x] RemoveJobs
     - [x] AddGang
-    - [ ] AddGangs
+    - [x] AddGangs
+    - [x] UpdateGang
+    - [x] RemoveGang
+    - [x] RemoveGangs
 
 > Methods kept for backwards compatibility aren't going to be added!
 > - Client > functions
